@@ -12,6 +12,7 @@ namespace Unmangler
         private static string MangledString;
         private static UnmangleFlags Flags;
         private int CurrentPosition;
+        public readonly List<string> Failures;
 
         private char ParsedSymbol
         {
@@ -29,6 +30,7 @@ namespace Unmangler
             Flags = UnmangleFlags.UNDNAME_COMPLETE;
             ParsedSymbol = char.MinValue;
             CurrentPosition = 0;
+            Failures = new List<string>();
         }
 
         private void ChangePosition(int byInt)
@@ -567,7 +569,6 @@ namespace Unmangler
         {
             var result = string.Empty;
             var nonStandardNames = new List<string>();
-            var failures = new List<string>();
 
             if (MangledString[0] != '?') // all MSVC++ mangled functions should have this first char!
             {
@@ -659,7 +660,7 @@ namespace Unmangler
             }
             else
             {
-                failures.Add(MangledString);
+                Failures.Add(MangledString);
             }
 
             //TODO: return data type and access level
